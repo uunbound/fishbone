@@ -1,0 +1,5 @@
+*.pyc
+.project
+.pydevproject
+local_settings.py
+node_modules

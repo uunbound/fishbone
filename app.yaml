@@ -1,0 +1,56 @@
+application: fishbone
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+builtins:
+- appstats: on
+- admin_redirect: on
+
+handlers:
+- url: /static
+  static_dir: static
+
+- url: /favicon.ico
+  static_files: static/assets/img/icons/favicon.ico
+  upload: static/assets/img/icons/favicon.ico
+
+- url: /apple-touch-icon-precomposed.png
+  static_files: static/assets/img/icons/apple-touch-icon-57x57-precomposed.png
+  upload: static/assets/img/icons/apple-touch-icon-57x57-precomposed.png
+
+- url: /apple-touch-icon-144x144-precomposed.png
+  static_files: static/assets/img/icons/apple-touch-icon-144x144-precomposed.png
+  upload: static/assets/img/icons/apple-touch-icon-144x144-precomposed.png
+
+- url: /apple-touch-icon-114x114-precomposed.png
+  static_files: static/assets/img/icons/apple-touch-icon-114x114-precomposed.png
+  upload: static/assets/img/icons/apple-touch-icon-114x114-precomposed.png
+
+- url: /apple-touch-icon-72x72-precomposed.png
+  static_files: static/assets/img/icons/apple-touch-icon-72x72-precomposed.png
+  upload: static/assets/img/icons/apple-touch-icon-72x72-precomposed.png
+
+- url: /apple-touch-icon-57x57-precomposed.png
+  static_files: static/assets/img/icons/apple-touch-icon-57x57-precomposed.png
+  upload: static/assets/img/icons/apple-touch-icon-57x57-precomposed.png
+
+- url: /apple-touch-icon.png
+  static_files: static/assets/img/icons/apple-touch-icon-57x57-precomposed.png
+  upload: static/assets/img/icons/apple-touch-icon-57x57-precomposed.png
+
+- url: /robots.txt
+  static_files: robots.txt
+  upload: robots.txt
+
+- url: /humans.txt
+  static_files: humans.txt
+  upload: humans.txt
+
+- url: /.*
+  script: main.application
+
+libraries:
+  - name: django
+    version: latest
