@@ -34,13 +34,13 @@ module.exports = (grunt) ->
         separator: ";"
 
       dist:
-        src: ["<%= resource.js %>/libs/almond-0.2.5.js", "<%= resource.js %>/libs/require-2.1.5.min.js"]
-        dest: "<%= dist.dev %>/require.js"
+        src: ["<%= resource.js %>/lib/almond-0.2.5.js", "<%= resource.js %>/lib/require-2.1.5.min.js"]
+        dest: "<%= dist.js %>/require.js"
 
     uglify:
       dist:
         src: "<%= concat.dist.dest %>"
-        dest: "<%= dist.prod %>/require.js"
+        dest: "<%= dist.js %>/require.js"
 
     jshint:
       options:
@@ -83,19 +83,24 @@ module.exports = (grunt) ->
           "<%= resource.css %>/theme-responsive.css": "<%= resource.less %>/theme-responsive.less"
 
     cssmin:
-      combine:
-        files:
-          "<%= dist.prod %>/style/main.css": ["<%= dist.dev %>/style/theme.css", "<%= dist.dev %>/style/theme-responsive.css"]
-
       minify:
         expand: true
-        cwd: "<%= dist.dev %>/style/"
+        cwd: "<%= resource.css %>"
         src: ["*.css", "!*.min.css"]
-        dest: "<%= dist.prod %>/style/"
+        dest: "<%= dist.css %>"
         ext: ".min.css"
 
     requirejs:
-      compile:
+      dev:
+        options:
+          # almond: true
+          # modules: [{name: 'config'}],
+          optimize: "none"
+          name: "main"
+          baseUrl: "<%= resource.js %>"
+          out: "<%= resource.js %>/main.compiled.js"
+          mainConfigFile: "<%= resource.js %>/main.js"
+      prod:
         options:
           # almond: true
           # modules: [{name: 'config'}],
@@ -118,7 +123,7 @@ module.exports = (grunt) ->
         tasks: ["coffee"]
 
     copy:
-      dist:
+      dev:
         files: [
           flatten: true
           expand: true
@@ -160,6 +165,28 @@ module.exports = (grunt) ->
           src: ["<%= resource.img %>/*"]
           dest: "<%= dist.img %>/"
         ]
+      prod:
+        files: [
+          flatten: true
+          expand: true
+          src: ["<%= resource.js %>/lib/*.js"]
+          dest: "<%= dist.js %>/lib/"
+        ,
+          flatten: true
+          expand: true
+          src: ["<%= resource.js %>/lib/require.js"]
+          dest: "<%= dist.js %>/"
+        ,
+          flatten: true
+          expand: true
+          src: ["<%= resource.js %>/main.compiled.js"]
+          dest: "<%= dist.js %>/"
+        ,
+          flatten: true
+          expand: true
+          src: ["<%= resource.img %>/*"]
+          dest: "<%= dist.img %>/"
+        ]
 
   # These plugins provide necessary tasks.
   grunt.loadNpmTasks "grunt-contrib-clean"
@@ -174,6 +201,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-watch"
 
   # Default task.
-  grunt.registerTask "default", ["clean", "jshint", "less", "coffee", "requirejs"]
-  grunt.registerTask "dev", ["default", "copy"]
-  grunt.registerTask "prod", ["default", "cssmin", "copy"]
+  grunt.registerTask "default", ["clean", "jshint", "less", "coffee"]
+  grunt.registerTask "dev", ["default", "requirejs:dev", "copy:dev"]
+  grunt.registerTask "prod", ["default", "requirejs:prod", "cssmin", "copy:prod"]

@@ -150,6 +150,8 @@ try:
     LOCAL_SETTINGS
 except NameError:
     try:
+        # clone __local_settings.py and name it local_settings.py to add
+        # env-specific configuration in there
         from local_settings import *
     except ImportError:
         pass
